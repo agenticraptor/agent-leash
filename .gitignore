@@ -1,0 +1,27 @@
+# Binaries
+/agent-leash
+/dist/
+/bin/
+*.exe
+*.out
+
+# Test & coverage
+coverage.out
+coverage.html
+*.test
+
+# gofmt/editor temp files (e.g. types.go.123456789)
+*.go.[0-9]*
+
+# Editor / OS cruft
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Vendored dependencies (builds use go.sum + the module proxy instead)
+/vendor/
+
+# Local env
+.env
+.env.local
