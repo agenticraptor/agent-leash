@@ -9,7 +9,7 @@ import (
 )
 
 // createNewProcessGroup is the Windows flag that starts the child in a new
-// process group, so it can be signalled independently of agent-leash.
+// process group, so it can be signaled independently of agent-leash.
 const createNewProcessGroup = 0x00000200
 
 func setProcessGroup(cmd *exec.Cmd) {

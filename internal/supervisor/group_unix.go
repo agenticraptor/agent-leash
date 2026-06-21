@@ -8,7 +8,7 @@ import (
 )
 
 // setProcessGroup puts the child in its own process group so the whole tree can
-// be signalled at once.
+// be signaled at once.
 func setProcessGroup(cmd *exec.Cmd) {
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 }

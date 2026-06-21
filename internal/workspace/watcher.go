@@ -27,7 +27,7 @@ func NewWatcher(tracker *Tracker, onChange func()) (*Watcher, error) {
 	return &Watcher{tracker: tracker, onChange: onChange, fsw: fsw}, nil
 }
 
-// Start adds the initial watches and processes events until ctx is cancelled,
+// Start adds the initial watches and processes events until ctx is canceled,
 // after which the underlying watcher is closed.
 func (w *Watcher) Start(ctx context.Context) error {
 	w.addRecursive(w.tracker.root, false) // baseline: watch, but do not count existing files
