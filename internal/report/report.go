@@ -60,24 +60,24 @@ func StopBanner(w io.Writer, c supervisor.StopCause) {
 func SessionReport(w io.Writer, res supervisor.Result, lim policy.Limits) {
 	var b strings.Builder
 	header := styleAccent.Render("agent-leash") + styleDim.Render(" · session report")
-	b.WriteString(header + "\n")
+	fmt.Fprint(&b, header+"\n")
 
 	status := styleOK.Render("completed within budget")
 	if res.Stopped {
 		status = styleDanger.Render("STOPPED") + " — " + res.Cause.Reason
 	}
-	b.WriteString(line("status", status))
-	b.WriteString(line("files changed", ratio(res.Usage.FilesChanged, lim.MaxFilesChanged)))
-	b.WriteString(line("new deps", ratio(res.Usage.NewDeps, lim.MaxNewDeps)))
-	b.WriteString(line("commands", count(res.Usage.Commands, lim.MaxCommands)))
-	b.WriteString(line("time", durRatio(res.Usage.Elapsed, lim.MaxDuration.Duration)))
+	fmt.Fprint(&b, line("status", status))
+	fmt.Fprint(&b, line("files changed", ratio(res.Usage.FilesChanged, lim.MaxFilesChanged)))
+	fmt.Fprint(&b, line("new deps", ratio(res.Usage.NewDeps, lim.MaxNewDeps)))
+	fmt.Fprint(&b, line("commands", count(res.Usage.Commands, lim.MaxCommands)))
+	fmt.Fprint(&b, line("time", durRatio(res.Usage.Elapsed, lim.MaxDuration.Duration)))
 	if lim.MaxCostUSD > 0 || res.Usage.CostUSD > 0 {
-		b.WriteString(line("cost", fmt.Sprintf("$%.2f / %s", res.Usage.CostUSD, dollars(lim.MaxCostUSD))))
+		fmt.Fprint(&b, line("cost", fmt.Sprintf("$%.2f / %s", res.Usage.CostUSD, dollars(lim.MaxCostUSD))))
 	}
 	if len(res.NewDeps) > 0 {
-		b.WriteString(line("added", summarize(res.NewDeps, 4)))
+		fmt.Fprint(&b, line("added", summarize(res.NewDeps, 4)))
 	}
-	b.WriteString(line("exit code", fmt.Sprintf("%d", res.ExitCode)))
+	fmt.Fprint(&b, line("exit code", fmt.Sprintf("%d", res.ExitCode)))
 
 	fmt.Fprintln(w, reportBox.Render(strings.TrimRight(b.String(), "\n")))
 }

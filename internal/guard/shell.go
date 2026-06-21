@@ -19,7 +19,7 @@ func splitSegments(line string) []segment {
 	var (
 		segs   []segment
 		cur    segment
-		token  strings.Builder
+		token  []rune
 		hasTok bool
 		quote  byte // active quote byte, or 0
 		redir  bool // the next finished token is a redirect target
@@ -30,14 +30,14 @@ func splitSegments(line string) []segment {
 		if !hasTok {
 			return
 		}
-		t := token.String()
+		t := string(token)
 		if redir {
 			cur.Redirects = append(cur.Redirects, t)
 			redir = false
 		} else {
 			cur.Args = append(cur.Args, t)
 		}
-		token.Reset()
+		token = token[:0]
 		hasTok = false
 	}
 	flushSegment := func() {
@@ -54,7 +54,7 @@ func splitSegments(line string) []segment {
 			if byte(c) == quote {
 				quote = 0
 			} else {
-				token.WriteRune(c)
+				token = append(token, c)
 				hasTok = true
 			}
 			continue
@@ -81,7 +81,7 @@ func splitSegments(line string) []segment {
 				i++ // consume the second char of && or ||
 			}
 		default:
-			token.WriteRune(c)
+			token = append(token, c)
 			hasTok = true
 		}
 	}

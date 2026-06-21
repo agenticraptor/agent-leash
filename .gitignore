@@ -25,3 +25,6 @@ coverage.html
 # Local env
 .env
 .env.local
+
+# Stray helper scripts must not be committed
+/*.sh

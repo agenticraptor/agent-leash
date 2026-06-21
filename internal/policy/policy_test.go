@@ -187,7 +187,14 @@ func TestWorkspaceRootResolvesRelative(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got != filepath.Clean("/base/sub") {
-		t.Errorf("WorkspaceRoot = %q", got)
+	// Compute the expectation the same way WorkspaceRoot does so the test is
+	// correct on every OS (on Windows filepath.Abs adds a drive letter to a
+	// drive-less path like "/base").
+	want, err := filepath.Abs(filepath.Join("/base", "sub"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != filepath.Clean(want) {
+		t.Errorf("WorkspaceRoot = %q, want %q", got, filepath.Clean(want))
 	}
 }
